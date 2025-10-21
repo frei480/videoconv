@@ -6,9 +6,8 @@ from checks import Setup
 
 def main():
     """
-    This script add soundtrack to video files using FFmpeg.
-    It finds video files in an 'input' folder, add mp3 file
-    while copying the audio stream, and saves them to an 'output' folder.
+    This script extract soundtrack from video files using FFmpeg.
+    It finds video files in an 'input' folder, and saves mp3 to an 'output' folder.
     """
     current_path = Path(__file__).parent.resolve()
     setup = Setup(current_path)
@@ -23,28 +22,19 @@ def main():
         print("Please add video files to the input folder and run the script again.")
         input("Press Enter to exit...")
         return
-
-    # Iterate over each file in the input folder
     for file_path in files_to_process:
         print("\n" + "-" * 12 + " Starting next file " + "-" * 12)
         print(f"Processing: {file_path.name}")
         # Change extension (container type)
-        output_file_path = str(output_folder / file_path.stem) + ".mp4"
-        add_soundtrack = str(input_folder / file_path.stem) + ".mp3"
+        output_file_path = str(output_folder / file_path.stem) + "_sound.opus"
+
         args = [
             str(ffmpeg_path),
             "-i",
             str(file_path),
-            "-i",
-            add_soundtrack,
-            "-c",
+            "-vn",
+            "-acodec",
             "copy",
-            "-map",
-            "0:0",
-            "-map",
-            "0:1",
-            "-map",
-            "1:0",
             output_file_path,
         ]
 
